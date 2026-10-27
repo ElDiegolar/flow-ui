@@ -1,0 +1,22 @@
+{
+  "name": "Acme workspace",
+  "projectsDir": "projects",
+  "categories": ["frontends", "backends"],
+  "commands": [
+    { "id": "test", "label": "Run tests", "run": "npm test", "scope": "repo" },
+    {
+      "id": "lint",
+      "label": "Lint",
+      "run": "npm run lint",
+      "scope": "repo",
+      "categories": ["frontends"]
+    },
+    {
+      "id": "deploy-staging",
+      "label": "Deploy staging",
+      "run": "./tools/acme deploy staging",
+      "scope": "workspace",
+      "confirm": true
+    }
+  ]
+}

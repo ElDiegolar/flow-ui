@@ -1,0 +1,32 @@
+{
+  "name": "flow-ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "daemon",
+    "web"
+  ],
+  "scripts": {
+    "dev": "concurrently -n daemon,web -c blue,green \"npm:dev -w daemon\" \"npm:dev -w web\"",
+    "build": "npm run build -w web",
+    "start": "npm run start -w daemon",
+    "typecheck": "npm run typecheck -w daemon",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"daemon/src/**/*.ts\" \"web/src/**/*.{js,vue}\" \"web/tests/**/*.js\" \"*.{js,json}\"",
+    "format:check": "prettier --check \"daemon/src/**/*.ts\" \"web/src/**/*.{js,vue}\" \"web/tests/**/*.js\" \"*.{js,json}\"",
+    "test:e2e": "npm run test:e2e -w web",
+    "verify": "npm run typecheck && npm run lint && npm run format:check && npm run build && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "concurrently": "^9.0.1",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^9.1.2",
+    "eslint-plugin-vue": "^9.33.0",
+    "globals": "^17.7.0",
+    "prettier": "^3.8.4",
+    "typescript-eslint": "^8.62.0"
+  }
+}

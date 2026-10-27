@@ -1,0 +1,4 @@
+node_modules
+**/dist
+web/tests/e2e/fixtures
+package-lock.json

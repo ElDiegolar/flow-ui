@@ -1,0 +1,2238 @@
+/*
+ * The original Flow look, kept as an opt-in theme: the stylesheet as it
+ * was, every selector scoped to :root[data-theme='cyberpunk'] (so it outranks
+ * the default theme only while selected). Its fonts are loaded on demand by
+ * App.vue when the theme is picked.
+ */
+
+:root[data-theme='cyberpunk'] {
+  /* Canonical cyberpunk palette */
+  --bg: #07071a;
+  --bg-gradient: radial-gradient(ellipse at 20% -10%, #1a0035 0%, #07071a 55%);
+  --panel: #0d0e24;
+  --panel-2: #14162c;
+  --panel-3: #1a1c38;
+  --border: #2a2e58;
+  --border-glow: #05d9e8;
+
+  --text: #e2f0ff;
+  --text-dim: #6c7aa1;
+  --text-faint: #3e4a72;
+
+  --neon-cyan: #05d9e8;
+  --neon-pink: #ff2a6d;
+  --neon-yellow: #fcee0a;
+  --neon-purple: #b300ff;
+  --neon-green: #2dffb1;
+
+  /* Semantic aliases */
+  --accent: var(--neon-cyan);
+  --accent-hover: #6ef0ff;
+  --danger: var(--neon-pink);
+  --danger-hover: #ff5d92;
+  --success: var(--neon-green);
+  --warning: var(--neon-yellow);
+
+  --radius: 2px;
+  --clip-corner: polygon(
+    0 10px,
+    10px 0,
+    calc(100% - 10px) 0,
+    100% 10px,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    10px 100%,
+    0 calc(100% - 10px)
+  );
+  --clip-corner-sm: polygon(
+    0 6px,
+    6px 0,
+    calc(100% - 6px) 0,
+    100% 6px,
+    100% calc(100% - 6px),
+    calc(100% - 6px) 100%,
+    6px 100%,
+    0 calc(100% - 6px)
+  );
+
+  font-family: 'Rajdhani', 'Inter', sans-serif;
+}
+
+:root[data-theme='cyberpunk'] *,
+:root[data-theme='cyberpunk'] *::before,
+:root[data-theme='cyberpunk'] *::after {
+  box-sizing: border-box;
+}
+
+:root[data-theme='cyberpunk'],
+:root[data-theme='cyberpunk'] body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  background-image: var(--bg-gradient);
+  color: var(--text);
+  min-height: 100vh;
+  overflow: hidden;
+  letter-spacing: 0.02em;
+}
+
+/* Subtle scanline overlay — fixed to viewport so it doesn't move on scroll */
+:root[data-theme='cyberpunk'] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(5, 217, 232, 0.025) 0px,
+    rgba(5, 217, 232, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 1000;
+  mix-blend-mode: overlay;
+}
+
+:root[data-theme='cyberpunk'] button {
+  font: inherit;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+}
+:root[data-theme='cyberpunk'] code,
+:root[data-theme='cyberpunk'] pre,
+:root[data-theme='cyberpunk'] .mono {
+  font-family: 'Share Tech Mono', 'JetBrains Mono', Consolas, monospace;
+}
+
+/* App layout */
+:root[data-theme='cyberpunk'] .app {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  gap: 0.6rem;
+  padding: 0.6rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Everything below the header shares one grid row. Status banners hug their
+   content and the active view takes the rest; before this the first banner
+   landed in the grid's 1fr row and stretched to fill it. */
+:root[data-theme='cyberpunk'] .app__body {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-height: 0;
+  overflow: hidden;
+}
+:root[data-theme='cyberpunk'] .app__body > :last-child {
+  flex: 1;
+  min-height: 0;
+}
+
+:root[data-theme='cyberpunk'] .app__header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+:root[data-theme='cyberpunk'] .app__header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--neon-cyan) 30%,
+    var(--neon-pink) 70%,
+    transparent
+  );
+  filter: blur(0.5px);
+  opacity: 0.6;
+}
+
+:root[data-theme='cyberpunk'] .app__title {
+  display: flex;
+  gap: 1.75rem;
+  align-items: center;
+}
+:root[data-theme='cyberpunk'] .app__title > span:first-child {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-shadow:
+    0 0 8px rgba(5, 217, 232, 0.7),
+    0 0 16px rgba(5, 217, 232, 0.4);
+}
+
+:root[data-theme='cyberpunk'] .app__meta {
+  font-size: 0.75rem;
+  display: flex;
+  gap: 0.6rem;
+  font-family: 'Share Tech Mono', monospace;
+}
+:root[data-theme='cyberpunk'] .app__meta .pill {
+  padding: 4px 12px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+:root[data-theme='cyberpunk'] .app__meta .pill.ok {
+  color: var(--neon-green);
+  border-color: rgba(45, 255, 177, 0.4);
+  box-shadow: 0 0 8px rgba(45, 255, 177, 0.3);
+}
+:root[data-theme='cyberpunk'] .app__meta .pill.bad {
+  color: var(--neon-pink);
+  border-color: rgba(255, 42, 109, 0.4);
+  box-shadow: 0 0 8px rgba(255, 42, 109, 0.3);
+}
+:root[data-theme='cyberpunk'] .app__meta .pill.info {
+  color: var(--neon-cyan, var(--text));
+  border-color: rgba(0, 240, 255, 0.4);
+}
+
+/* Tabs */
+:root[data-theme='cyberpunk'] .tabs {
+  display: flex;
+  gap: 2px;
+}
+:root[data-theme='cyberpunk'] .tab {
+  background: transparent;
+  color: var(--text-dim);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 6px 14px 8px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  transition:
+    color 0.15s,
+    border-color 0.15s,
+    text-shadow 0.15s;
+}
+:root[data-theme='cyberpunk'] .tab:hover {
+  color: var(--neon-cyan);
+}
+:root[data-theme='cyberpunk'] .tab.active {
+  color: var(--neon-cyan);
+  border-bottom-color: var(--neon-cyan);
+  text-shadow: 0 0 8px rgba(5, 217, 232, 0.6);
+}
+
+/* Card list (dashboard cards column) */
+:root[data-theme='cyberpunk'] .cards {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding-right: 0.25rem;
+}
+:root[data-theme='cyberpunk'] .cards::-webkit-scrollbar {
+  width: 6px;
+}
+:root[data-theme='cyberpunk'] .cards::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+
+:root[data-theme='cyberpunk'] .card {
+  position: relative;
+  background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.7rem 1rem 0.85rem;
+}
+:root[data-theme='cyberpunk'] .card::before {
+  /* Left accent rail */
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--neon-cyan), var(--neon-pink));
+  filter: drop-shadow(0 0 4px var(--neon-cyan));
+}
+
+:root[data-theme='cyberpunk'] .card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+:root[data-theme='cyberpunk'] .card__title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 6px rgba(5, 217, 232, 0.5);
+}
+:root[data-theme='cyberpunk'] .card__sub {
+  font-size: 0.65rem;
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+:root[data-theme='cyberpunk'] .card__repos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+:root[data-theme='cyberpunk'] .repo {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(5, 217, 232, 0.03);
+  border: 1px solid rgba(42, 46, 88, 0.6);
+  border-radius: 2px;
+  padding: 0.45rem 0.7rem;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+:root[data-theme='cyberpunk'] .repo:hover {
+  background: rgba(5, 217, 232, 0.07);
+  border-color: rgba(5, 217, 232, 0.35);
+}
+:root[data-theme='cyberpunk'] .repo__name {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text);
+  letter-spacing: 0.05em;
+}
+:root[data-theme='cyberpunk'] .repo__status {
+  font-size: 0.65rem;
+  color: var(--text-faint);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+:root[data-theme='cyberpunk'] .repo__status .dot {
+  width: 7px;
+  height: 7px;
+  background: var(--text-faint);
+  display: inline-block;
+  border-radius: 50%;
+}
+:root[data-theme='cyberpunk'] .repo__status .dot.running {
+  background: var(--neon-green);
+  box-shadow: 0 0 8px var(--neon-green);
+}
+:root[data-theme='cyberpunk'] .repo__status .dot.exited {
+  background: var(--neon-yellow);
+  box-shadow: 0 0 8px var(--neon-yellow);
+}
+
+:root[data-theme='cyberpunk'] .repo__actions {
+  display: flex;
+  gap: 3px;
+}
+
+/* Buttons — sharp neon rectangles. Subtle by default, glow on hover. */
+:root[data-theme='cyberpunk'] .btn {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 5px 14px;
+  border-radius: 2px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  transition:
+    color 0.15s,
+    border-color 0.15s,
+    background 0.15s,
+    box-shadow 0.15s,
+    text-shadow 0.15s;
+}
+:root[data-theme='cyberpunk'] .btn:hover {
+  color: var(--neon-cyan);
+  border-color: var(--neon-cyan);
+  background: rgba(5, 217, 232, 0.06);
+  box-shadow: 0 0 10px rgba(5, 217, 232, 0.35);
+  text-shadow: 0 0 6px rgba(5, 217, 232, 0.5);
+}
+:root[data-theme='cyberpunk'] .btn.primary {
+  background: rgba(5, 217, 232, 0.1);
+  color: var(--neon-cyan);
+  border-color: var(--neon-cyan);
+  text-shadow: 0 0 5px rgba(5, 217, 232, 0.6);
+}
+:root[data-theme='cyberpunk'] .btn.primary:hover {
+  background: rgba(5, 217, 232, 0.2);
+  box-shadow: 0 0 14px rgba(5, 217, 232, 0.55);
+}
+:root[data-theme='cyberpunk'] .btn.danger {
+  color: var(--neon-pink);
+  border-color: rgba(255, 42, 109, 0.5);
+}
+:root[data-theme='cyberpunk'] .btn.danger:hover {
+  background: rgba(255, 42, 109, 0.1);
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 12px rgba(255, 42, 109, 0.5);
+  color: #ffd5e3;
+  text-shadow: 0 0 6px rgba(255, 42, 109, 0.6);
+}
+:root[data-theme='cyberpunk'] .btn[disabled] {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Runner panel */
+:root[data-theme='cyberpunk'] .runner {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+:root[data-theme='cyberpunk'] .runner::before {
+  /* Right accent rail */
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--neon-pink), var(--neon-cyan));
+  filter: drop-shadow(0 0 4px var(--neon-pink));
+}
+:root[data-theme='cyberpunk'] .runner__head {
+  padding: 0.55rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 42, 109, 0.04);
+}
+:root[data-theme='cyberpunk'] .runner__title {
+  font-size: 0.8rem;
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+}
+:root[data-theme='cyberpunk'] .runner__title .label {
+  color: var(--neon-pink);
+  text-shadow: 0 0 8px rgba(255, 42, 109, 0.7);
+  margin-right: 6px;
+}
+:root[data-theme='cyberpunk'] .runner__exit {
+  font-size: 0.7rem;
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+:root[data-theme='cyberpunk'] .runner__body {
+  flex: 1;
+  min-height: 0;
+  padding: 6px;
+  background: #03030f;
+  position: relative;
+}
+:root[data-theme='cyberpunk'] .runner__body::after {
+  /* CRT-style vignette */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.4) 100%);
+  pointer-events: none;
+}
+:root[data-theme='cyberpunk'] .runner__body .xterm {
+  padding: 6px;
+  height: 100%;
+}
+:root[data-theme='cyberpunk'] .runner__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-faint);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 2rem;
+  letter-spacing: 0.05em;
+}
+:root[data-theme='cyberpunk'] .runner__empty::before {
+  content: '> ';
+  color: var(--neon-pink);
+  margin-right: 4px;
+}
+
+/* Form pane (Agent + Commit views) */
+:root[data-theme='cyberpunk'] .form-pane {
+  background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1rem 1.2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  position: relative;
+}
+:root[data-theme='cyberpunk'] .form-pane::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--neon-cyan), var(--neon-purple));
+  filter: drop-shadow(0 0 4px var(--neon-cyan));
+}
+:root[data-theme='cyberpunk'] .form-pane h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 0;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 8px rgba(5, 217, 232, 0.5);
+}
+:root[data-theme='cyberpunk'] .form-pane .hint {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  line-height: 1.55;
+  font-family: 'Share Tech Mono', monospace;
+  margin: 0;
+}
+:root[data-theme='cyberpunk'] .form-pane .hint code {
+  background: var(--panel-3);
+  padding: 1px 6px;
+  font-size: 0.75rem;
+  color: var(--neon-yellow);
+  border: 1px solid rgba(252, 238, 10, 0.2);
+}
+:root[data-theme='cyberpunk'] .form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+:root[data-theme='cyberpunk'] .form-row label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+:root[data-theme='cyberpunk'] .form-row select,
+:root[data-theme='cyberpunk'] .form-row textarea,
+:root[data-theme='cyberpunk'] .form-row input {
+  background: var(--panel-3);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text);
+  padding: 7px 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+:root[data-theme='cyberpunk'] .form-row select:focus,
+:root[data-theme='cyberpunk'] .form-row textarea:focus,
+:root[data-theme='cyberpunk'] .form-row input:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(5, 217, 232, 0.4);
+}
+:root[data-theme='cyberpunk'] .form-row textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+:root[data-theme='cyberpunk'] .seg {
+  display: flex;
+  gap: 4px;
+}
+:root[data-theme='cyberpunk'] .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.4rem;
+}
+:root[data-theme='cyberpunk'] .form-error {
+  color: var(--neon-pink);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  text-shadow: 0 0 6px rgba(255, 42, 109, 0.5);
+}
+
+/* Terminal panel (shared by runner + orchestrator) */
+:root[data-theme='cyberpunk'] .terminal-panel {
+  height: 100%;
+  width: 100%;
+}
+:root[data-theme='cyberpunk'] .terminal-panel .xterm {
+  padding: 6px;
+  height: 100%;
+}
+
+/* Orchestrator view — spans the full content grid */
+:root[data-theme='cyberpunk'] .orchestrator {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-height: 0;
+}
+:root[data-theme='cyberpunk'] .orchestrator__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.5rem 0.85rem;
+}
+:root[data-theme='cyberpunk'] .orchestrator__id {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+:root[data-theme='cyberpunk'] .orchestrator__id .label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  color: var(--neon-purple);
+  text-shadow: 0 0 8px rgba(179, 0, 255, 0.6);
+}
+:root[data-theme='cyberpunk'] .orchestrator__id .pill {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+:root[data-theme='cyberpunk'] .orchestrator__id .pill.ok {
+  color: var(--neon-green);
+  border-color: rgba(45, 255, 177, 0.4);
+  box-shadow: 0 0 8px rgba(45, 255, 177, 0.3);
+}
+:root[data-theme='cyberpunk'] .orchestrator__id .pill.bad {
+  color: var(--text-dim);
+}
+:root[data-theme='cyberpunk'] .orchestrator__actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* One live terminal pane per agent. The orchestrator spans the full width; its
+   sub-agents flow at half width (two per row). Wraps into rows and scrolls
+   vertically when the panes outgrow the viewport. Each pane is independently
+   resizable in both directions. */
+:root[data-theme='cyberpunk'] .orchestrator__grid {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 0.8rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+:root[data-theme='cyberpunk'] .agent-pane {
+  display: flex;
+  flex-direction: column;
+  background: #03030f;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  /* Freely resizable in both directions — drag the bottom-right handle. Defaults
+     to the full window width until the user narrows it. */
+  width: 100%;
+  height: clamp(320px, 50vh, 720px);
+  min-width: 300px;
+  min-height: 220px;
+  resize: both;
+}
+/* Sub-agent windows start at half width so two sit side by side; still freely
+   resizable from there. */
+:root[data-theme='cyberpunk'] .agent-pane--sub {
+  width: calc(50% - 0.4rem);
+}
+:root[data-theme='cyberpunk'] .agent-pane.focused {
+  border-color: var(--neon-cyan, #05d9e8);
+  box-shadow: 0 0 12px rgba(5, 217, 232, 0.35);
+}
+:root[data-theme='cyberpunk'] .agent-pane__head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.74rem;
+  color: var(--text);
+}
+:root[data-theme='cyberpunk'] .agent-pane__head .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-faint);
+  flex: none;
+}
+:root[data-theme='cyberpunk'] .agent-pane__head .dot.running {
+  background: var(--neon-green);
+  box-shadow: 0 0 6px var(--neon-green);
+}
+:root[data-theme='cyberpunk'] .agent-pane__head .dot.exited {
+  background: var(--neon-yellow);
+  box-shadow: 0 0 6px var(--neon-yellow);
+}
+:root[data-theme='cyberpunk'] .agent-pane__head .agent-role {
+  flex: none;
+  text-transform: uppercase;
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+  color: var(--bg, #0b0f14);
+  background: var(--neon-cyan, #05d9e8);
+}
+:root[data-theme='cyberpunk'] .agent-pane__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Badge hugs the label; the Stop button owns the far right via its own auto. */
+:root[data-theme='cyberpunk'] .agent-pane__head .needs-input {
+  margin-left: 0;
+}
+:root[data-theme='cyberpunk'] .agent-pane__stop {
+  margin-left: auto;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.66rem;
+  flex: none;
+}
+/* Terminal fills whatever height the pane is resized to; TerminalPanel's
+   ResizeObserver refits xterm to the new size. */
+:root[data-theme='cyberpunk'] .agent-pane__term {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+:root[data-theme='cyberpunk'] .agent-pane .terminal-panel {
+  height: 100%;
+  padding: 6px;
+}
+/* Hard input row pinned to the bottom of each agent window. */
+:root[data-theme='cyberpunk'] .agent-pane__input {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.5rem;
+}
+:root[data-theme='cyberpunk'] .agent-pane__input input {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: #03030f;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.76rem;
+  padding: 0.35rem 0.5rem;
+}
+:root[data-theme='cyberpunk'] .agent-pane__input input::placeholder {
+  color: var(--text-faint);
+}
+:root[data-theme='cyberpunk'] .agent-pane__input input:focus {
+  outline: none;
+  border-color: var(--neon-cyan, #05d9e8);
+  box-shadow: 0 0 6px rgba(5, 217, 232, 0.3);
+}
+:root[data-theme='cyberpunk'] .agent-pane__input .btn {
+  flex: none;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.7rem;
+}
+/* Collapsible project card header. */
+:root[data-theme='cyberpunk'] .card__head {
+  cursor: pointer;
+  user-select: none;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  align-items: center;
+}
+:root[data-theme='cyberpunk'] .card__chevron {
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  flex: none;
+  width: 0.9em;
+}
+:root[data-theme='cyberpunk'] .card__head .card__sub {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+:root[data-theme='cyberpunk'] .card.collapsed {
+  padding-bottom: 0.7rem;
+}
+:root[data-theme='cyberpunk'] .orchestrator__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(300px, 44vh, 620px);
+  color: var(--text-faint);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+/* "needs input" badge on an agent pane + toast notifications. */
+:root[data-theme='cyberpunk'] .needs-input {
+  flex: none;
+  margin-left: auto;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.05rem 0.35rem;
+  border-radius: 3px;
+  color: var(--bg, #0b0f14);
+  background: var(--neon-yellow, #fcee0a);
+  animation: needs-pulse 1.1s ease-in-out infinite;
+}
+@keyframes needs-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+:root[data-theme='cyberpunk'] .needs-input.idle {
+  background: var(--neon-cyan, #3df);
+  animation: none;
+}
+:root[data-theme='cyberpunk'] .toasts {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 340px;
+}
+:root[data-theme='cyberpunk'] .toast {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--panel, #0e1420);
+  border: 1px solid var(--neon-yellow, #fcee0a);
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+  box-shadow: 0 0 16px rgba(252, 238, 10, 0.25);
+}
+:root[data-theme='cyberpunk'] .toast__icon {
+  color: var(--neon-yellow, #fcee0a);
+  font-size: 1rem;
+}
+:root[data-theme='cyberpunk'] .toast__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+:root[data-theme='cyberpunk'] .toast__body strong {
+  font-size: 0.78rem;
+}
+:root[data-theme='cyberpunk'] .toast__label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+:root[data-theme='cyberpunk'] .toast__x {
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+:root[data-theme='cyberpunk'] .screens-config {
+  background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.7rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+:root[data-theme='cyberpunk'] .screens-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Share Tech Mono', monospace;
+}
+:root[data-theme='cyberpunk'] .screens-table th {
+  text-align: left;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  padding: 0 0.4rem 0.3rem;
+  font-weight: 600;
+}
+:root[data-theme='cyberpunk'] .screens-table td {
+  padding: 0.15rem 0.4rem;
+}
+:root[data-theme='cyberpunk'] .screens-table input {
+  width: 100%;
+  background: var(--panel-3);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text);
+  padding: 5px 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.74rem;
+}
+:root[data-theme='cyberpunk'] .screens-table input:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 8px rgba(5, 217, 232, 0.35);
+}
+:root[data-theme='cyberpunk'] .screens-table td:nth-child(3) input,
+:root[data-theme='cyberpunk'] .screens-table td:nth-child(4) input,
+:root[data-theme='cyberpunk'] .screens-table td:nth-child(5) input {
+  width: 80px;
+}
+:root[data-theme='cyberpunk'] .screens-table td:last-child {
+  width: 1%;
+}
+:root[data-theme='cyberpunk'] .screens-config__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+:root[data-theme='cyberpunk'] .screens-config__actions .hint {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-faint);
+}
+
+:root[data-theme='cyberpunk'] .shot {
+  background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+:root[data-theme='cyberpunk'] .shot.approved {
+  border-color: rgba(45, 255, 177, 0.5);
+  box-shadow: 0 0 10px rgba(45, 255, 177, 0.15);
+}
+:root[data-theme='cyberpunk'] .shot.rejected {
+  border-color: rgba(255, 42, 109, 0.5);
+  box-shadow: 0 0 10px rgba(255, 42, 109, 0.15);
+}
+:root[data-theme='cyberpunk'] .shot__img {
+  display: block;
+  border: 1px solid var(--border);
+  background: #03030f;
+}
+:root[data-theme='cyberpunk'] .shot__img img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+:root[data-theme='cyberpunk'] .shot__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+:root[data-theme='cyberpunk'] .shot__name {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--text);
+  letter-spacing: 0.05em;
+}
+:root[data-theme='cyberpunk'] .shot .badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+}
+:root[data-theme='cyberpunk'] .shot .badge.approved {
+  color: var(--neon-green);
+  border-color: rgba(45, 255, 177, 0.4);
+}
+:root[data-theme='cyberpunk'] .shot .badge.rejected {
+  color: var(--neon-pink);
+  border-color: rgba(255, 42, 109, 0.4);
+}
+:root[data-theme='cyberpunk'] .shot .badge.pending {
+  color: var(--text-faint);
+}
+:root[data-theme='cyberpunk'] .shot__note {
+  background: var(--panel-3);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text);
+  padding: 5px 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+}
+:root[data-theme='cyberpunk'] .shot__note:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 8px rgba(5, 217, 232, 0.35);
+}
+:root[data-theme='cyberpunk'] .shot__actions {
+  display: flex;
+  gap: 0.4rem;
+}
+:root[data-theme='cyberpunk'] .shot__actions .btn {
+  flex: 1;
+}
+:root[data-theme='cyberpunk'] .btn.danger.is-on {
+  background: rgba(255, 42, 109, 0.18);
+  color: #ffd5e3;
+  box-shadow: 0 0 10px rgba(255, 42, 109, 0.4);
+}
+
+/* Danger modal overrides — heavier neon-pink theming */
+:root[data-theme='cyberpunk'] .danger-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+:root[data-theme='cyberpunk'] .danger-modal {
+  background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+  border: 1px solid var(--neon-pink);
+  border-radius: 3px;
+  box-shadow: 0 0 30px rgba(255, 42, 109, 0.4);
+  padding: 1.3rem 1.5rem;
+  width: 440px;
+  max-width: 92vw;
+  position: relative;
+}
+:root[data-theme='cyberpunk'] .danger-modal::before {
+  content: '⚠';
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  font-size: 1.4rem;
+  color: var(--neon-pink);
+  text-shadow: 0 0 10px var(--neon-pink);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+:root[data-theme='cyberpunk'] .danger-modal__title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--neon-pink);
+  text-shadow: 0 0 10px rgba(255, 42, 109, 0.7);
+  margin-bottom: 0.6rem;
+  padding-right: 30px;
+}
+:root[data-theme='cyberpunk'] .danger-modal__body {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+  font-family: 'Share Tech Mono', monospace;
+  line-height: 1.5;
+}
+:root[data-theme='cyberpunk'] .danger-modal__field {
+  margin-bottom: 1.1rem;
+}
+:root[data-theme='cyberpunk'] .danger-modal__hint {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin-bottom: 0.4rem;
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: 0.05em;
+}
+:root[data-theme='cyberpunk'] .danger-modal__hint code {
+  background: var(--panel-3);
+  padding: 2px 8px;
+  border: 1px solid rgba(255, 42, 109, 0.3);
+  color: var(--neon-pink);
+  text-shadow: 0 0 4px rgba(255, 42, 109, 0.5);
+}
+:root[data-theme='cyberpunk'] .danger-modal__field input {
+  width: 100%;
+  background: var(--panel-3);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text);
+  padding: 8px 12px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+}
+:root[data-theme='cyberpunk'] .danger-modal__field input:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 12px rgba(5, 217, 232, 0.4);
+}
+:root[data-theme='cyberpunk'] .danger-modal__field input.matched {
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 16px rgba(255, 42, 109, 0.5);
+}
+:root[data-theme='cyberpunk'] .danger-modal__check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.1rem;
+  font-size: 0.85rem;
+  color: var(--text-dim, #9aa);
+  cursor: pointer;
+}
+:root[data-theme='cyberpunk'] .danger-modal__check input {
+  accent-color: var(--neon-pink);
+}
+:root[data-theme='cyberpunk'] .danger-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+/* Tasks tab ----------------------------------------------------------------- */
+:root[data-theme='cyberpunk'] .tasks {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) 1fr;
+  gap: 1.2rem;
+  align-items: stretch;
+  min-height: 0;
+}
+:root[data-theme='cyberpunk'] .tasks .form-row.proj {
+  flex-direction: row;
+  gap: 0.5rem;
+}
+:root[data-theme='cyberpunk'] .tasks .form-row.proj select {
+  flex: 1;
+}
+/* Task board: three cards per row by default, wrapping into further rows and
+   scrolling vertically once they outgrow the pane. Sized in flex-basis rather
+   than a fixed grid so an individually resized card keeps its new width and its
+   neighbours reflow around it — the same treatment as the agent panes. */
+:root[data-theme='cyberpunk'] .task-list {
+  display: flex;
+  flex-flow: row wrap;
+  align-content: flex-start;
+  /* Cards keep their natural height instead of stretching to the tallest in the
+     row — one long description shouldn't pad out its neighbours. Resizing a
+     card gives it an explicit height from then on. */
+  align-items: flex-start;
+  gap: 0.7rem;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.3rem;
+}
+:root[data-theme='cyberpunk'] .task-card {
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  /* Three per row: a third of the track minus the two gaps between them.
+     Width lives in `width`, not `flex-basis` — `resize` sets an inline width,
+     and a flex-basis would win over it, so horizontal dragging would silently
+     do nothing. `flex: 0 0 auto` then keeps the dragged width instead of
+     shrinking it back. */
+  flex: 0 0 auto;
+  width: calc((100% - 1.4rem) / 3);
+  min-width: 240px;
+  max-width: 100%;
+  /* Drag the bottom-right handle to resize; overflow must not be `visible`
+     for the handle to appear. */
+  resize: both;
+  overflow: auto;
+}
+/* Narrower panes step down to two per row, then one, before the card hits its
+   min-width and forces a horizontal scrollbar. */
+@media (max-width: 1500px) {
+  :root[data-theme='cyberpunk'] .task-card {
+    width: calc((100% - 0.7rem) / 2);
+  }
+}
+@media (max-width: 1000px) {
+  :root[data-theme='cyberpunk'] .task-card {
+    width: 100%;
+  }
+}
+:root[data-theme='cyberpunk'] .task-card.status-done {
+  opacity: 0.6;
+}
+:root[data-theme='cyberpunk'] .task-card__head {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+:root[data-theme='cyberpunk'] .task-card__title {
+  margin: 0;
+  font-size: 0.95rem;
+}
+:root[data-theme='cyberpunk'] .task-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+:root[data-theme='cyberpunk'] .task-card__desc {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+}
+:root[data-theme='cyberpunk'] .task-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+:root[data-theme='cyberpunk'] .task-card__actions .jira-link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  color: var(--neon-cyan, #3df);
+  border-color: rgba(51, 221, 255, 0.4);
+}
+:root[data-theme='cyberpunk'] .task-card__actions .jira-link:hover {
+  background: rgba(51, 221, 255, 0.1);
+}
+:root[data-theme='cyberpunk'] .task-card__actions select {
+  background: var(--panel, #0e1420);
+  color: var(--text);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.15));
+  border-radius: 4px;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.75rem;
+}
+:root[data-theme='cyberpunk'] .tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.15));
+  color: var(--text-dim);
+  text-decoration: none;
+}
+:root[data-theme='cyberpunk'] .tag.jira {
+  color: var(--neon-cyan, #3df);
+  border-color: rgba(51, 221, 255, 0.4);
+}
+:root[data-theme='cyberpunk'] .tag.faint {
+  color: var(--text-faint);
+}
+:root[data-theme='cyberpunk'] .pill.st-todo {
+  color: var(--text-dim);
+}
+:root[data-theme='cyberpunk'] .pill.st-in_progress {
+  color: var(--neon-cyan, #3df);
+  border-color: rgba(51, 221, 255, 0.4);
+}
+:root[data-theme='cyberpunk'] .pill.st-review {
+  color: var(--neon-yellow, #fd3);
+  border-color: rgba(255, 221, 51, 0.4);
+}
+:root[data-theme='cyberpunk'] .pill.st-done {
+  color: var(--neon-green, #2dffb1);
+  border-color: rgba(45, 255, 177, 0.4);
+}
+:root[data-theme='cyberpunk'] .task-empty {
+  color: var(--text-faint);
+  font-style: italic;
+  padding: 1rem 0;
+}
+:root[data-theme='cyberpunk'] .jira-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.7rem;
+  margin-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+}
+:root[data-theme='cyberpunk'] .jira-bar__label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--text);
+}
+:root[data-theme='cyberpunk'] .jira-board-select {
+  background: var(--panel, #0e1420);
+  color: var(--text);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.15));
+  border-radius: 4px;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.74rem;
+  max-width: 240px;
+}
+:root[data-theme='cyberpunk'] .jira-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+:root[data-theme='cyberpunk'] .jira-toggle.on {
+  color: var(--neon-green, #2dffb1);
+}
+:root[data-theme='cyberpunk'] .jira-toggle input {
+  accent-color: var(--neon-green, #2dffb1);
+}
+@media (max-width: 860px) {
+  :root[data-theme='cyberpunk'] .tasks {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Diff tab ------------------------------------------------------------------ */
+:root[data-theme='cyberpunk'] .diff {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+:root[data-theme='cyberpunk'] .diff__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+:root[data-theme='cyberpunk'] .diff__bar select {
+  background: var(--panel, #0e1420);
+  color: var(--text);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.15));
+  border-radius: 4px;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+}
+:root[data-theme='cyberpunk'] .diff__main {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) 1fr;
+  gap: 0.9rem;
+  align-items: start;
+  min-height: 0;
+}
+:root[data-theme='cyberpunk'] .diff__files {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-height: 70vh;
+  overflow: auto;
+}
+:root[data-theme='cyberpunk'] .diff-file {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0.25rem 0.4rem;
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+}
+:root[data-theme='cyberpunk'] .diff-file:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+:root[data-theme='cyberpunk'] .diff-file.selected {
+  border-color: var(--neon-cyan, #3df);
+  background: rgba(51, 221, 255, 0.08);
+}
+:root[data-theme='cyberpunk'] .diff-file__path {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: rtl;
+}
+:root[data-theme='cyberpunk'] .diff-file__badge {
+  flex: none;
+  text-transform: uppercase;
+  font-size: 0.58rem;
+  letter-spacing: 0.03em;
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+  color: var(--bg, #0b0f14);
+  background: var(--text-faint);
+}
+:root[data-theme='cyberpunk'] .diff-file__badge.add,
+:root[data-theme='cyberpunk'] .diff-file__badge.new {
+  background: var(--neon-green, #2dffb1);
+}
+:root[data-theme='cyberpunk'] .diff-file__badge.del {
+  background: var(--neon-pink, #ff2a6d);
+}
+:root[data-theme='cyberpunk'] .diff-file__badge.mod {
+  background: var(--neon-yellow, #fcee0a);
+}
+:root[data-theme='cyberpunk'] .diff-file__badge.ren {
+  background: var(--neon-cyan, #3df);
+}
+:root[data-theme='cyberpunk'] .diff__view {
+  min-width: 0;
+}
+:root[data-theme='cyberpunk'] .diff-pre {
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  max-height: 72vh;
+  overflow: auto;
+  background: #03030f;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+  border-radius: 6px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+:root[data-theme='cyberpunk'] .diff-line {
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+:root[data-theme='cyberpunk'] .diff-line.add {
+  color: var(--neon-green, #2dffb1);
+  background: rgba(45, 255, 177, 0.08);
+}
+:root[data-theme='cyberpunk'] .diff-line.del {
+  color: var(--neon-pink, #ff5d92);
+  background: rgba(255, 42, 109, 0.08);
+}
+:root[data-theme='cyberpunk'] .diff-line.hunk {
+  color: var(--neon-cyan, #3df);
+}
+:root[data-theme='cyberpunk'] .diff-line.meta {
+  color: var(--text-faint);
+}
+:root[data-theme='cyberpunk'] .diff-line.ctx {
+  color: var(--text-dim);
+}
+:root[data-theme='cyberpunk'] .diff__empty {
+  color: var(--text-faint);
+  font-style: italic;
+  padding: 1rem 0;
+}
+@media (max-width: 860px) {
+  :root[data-theme='cyberpunk'] .diff__main {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── 3-pane task workspace ────────────────────────────────────────────────── */
+:root[data-theme='cyberpunk'] .workspace {
+  display: grid;
+  grid-template-rows: 1fr;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+:root[data-theme='cyberpunk'] body.resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+
+:root[data-theme='cyberpunk'] .splitter {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+:root[data-theme='cyberpunk'] .splitter--x {
+  cursor: col-resize;
+}
+:root[data-theme='cyberpunk'] .splitter--y {
+  cursor: row-resize;
+  height: 6px;
+}
+:root[data-theme='cyberpunk'] .splitter__grip {
+  background: var(--border);
+  border-radius: 3px;
+  transition: background 0.15s;
+}
+:root[data-theme='cyberpunk'] .splitter--x .splitter__grip {
+  width: 2px;
+  height: 38px;
+}
+:root[data-theme='cyberpunk'] .splitter--y .splitter__grip {
+  height: 2px;
+  width: 38px;
+}
+:root[data-theme='cyberpunk'] .splitter:hover .splitter__grip {
+  background: var(--neon-cyan);
+  box-shadow: 0 0 8px var(--neon-cyan);
+}
+
+/* LEFT — task rail */
+:root[data-theme='cyberpunk'] .rail {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+:root[data-theme='cyberpunk'] .rail__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+}
+:root[data-theme='cyberpunk'] .rail__title {
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--neon-cyan);
+  letter-spacing: 0.08em;
+}
+:root[data-theme='cyberpunk'] .rail__head-actions {
+  display: flex;
+  gap: 0.35rem;
+}
+:root[data-theme='cyberpunk'] .rail__note {
+  padding: 0.4rem 0.7rem;
+  color: var(--neon-cyan);
+  font-size: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+:root[data-theme='cyberpunk'] .btn.spinning {
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+:root[data-theme='cyberpunk'] .rail__new {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.6rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+}
+:root[data-theme='cyberpunk'] .rail__new input,
+:root[data-theme='cyberpunk'] .rail__new select {
+  background: var(--panel-3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 5px;
+  padding: 0.35rem 0.45rem;
+  font-size: 0.8rem;
+}
+:root[data-theme='cyberpunk'] .rail__list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+:root[data-theme='cyberpunk'] .rail__empty,
+:root[data-theme='cyberpunk'] .rail__error {
+  padding: 0.6rem 0.7rem;
+  color: var(--text-faint);
+  font-size: 0.8rem;
+}
+:root[data-theme='cyberpunk'] .rail__error {
+  color: var(--neon-pink);
+}
+
+:root[data-theme='cyberpunk'] .rail-card {
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 0.5rem 0.55rem;
+  background: var(--panel-2);
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+:root[data-theme='cyberpunk'] .rail-card:hover {
+  border-color: var(--text-dim);
+}
+:root[data-theme='cyberpunk'] .rail-card.active {
+  border-color: var(--neon-cyan);
+  box-shadow:
+    0 0 0 1px var(--neon-cyan),
+    0 0 12px rgba(5, 217, 232, 0.25);
+}
+:root[data-theme='cyberpunk'] .rail-card__top {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.3rem;
+}
+:root[data-theme='cyberpunk'] .rail-card__title {
+  font-size: 0.85rem;
+  color: var(--text);
+  margin-bottom: 0.45rem;
+  line-height: 1.25;
+}
+:root[data-theme='cyberpunk'] .rail-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+:root[data-theme='cyberpunk'] .rail-card__actions select {
+  background: var(--panel-3);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: 5px;
+  font-size: 0.7rem;
+  padding: 0.2rem;
+}
+:root[data-theme='cyberpunk'] .btn.icon {
+  padding: 0.2rem 0.4rem;
+}
+
+/* status pills (extends the task pills) */
+:root[data-theme='cyberpunk'] .pill.st-todo {
+  color: var(--text-dim);
+}
+:root[data-theme='cyberpunk'] .pill.st-in_progress {
+  color: var(--neon-cyan);
+  border-color: rgba(5, 217, 232, 0.4);
+}
+:root[data-theme='cyberpunk'] .pill.st-parked {
+  color: var(--neon-yellow);
+  border-color: rgba(252, 238, 10, 0.4);
+  box-shadow: 0 0 8px rgba(252, 238, 10, 0.2);
+}
+:root[data-theme='cyberpunk'] .pill.st-review {
+  color: var(--neon-purple);
+  border-color: rgba(179, 0, 255, 0.4);
+}
+:root[data-theme='cyberpunk'] .pill.st-done {
+  color: var(--neon-green);
+  border-color: rgba(45, 255, 177, 0.4);
+}
+
+/* CENTER — stacked terminals */
+:root[data-theme='cyberpunk'] .task-terminals {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+:root[data-theme='cyberpunk'] .task-terminals__empty {
+  margin: auto;
+  max-width: 360px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  padding: 2rem;
+  line-height: 1.5;
+}
+:root[data-theme='cyberpunk'] .task-terminals__empty-title {
+  color: var(--neon-cyan);
+  font-family: 'Share Tech Mono', monospace;
+  margin-bottom: 0.5rem;
+}
+:root[data-theme='cyberpunk'] .task-terminals__term {
+  flex: 1;
+  min-height: 0;
+}
+
+/* RIGHT — context panel */
+:root[data-theme='cyberpunk'] .context {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+:root[data-theme='cyberpunk'] .context__tabs {
+  display: flex;
+  gap: 0.2rem;
+  padding: 0.3rem 0.4rem;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+:root[data-theme='cyberpunk'] .context__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.7rem;
+}
+:root[data-theme='cyberpunk'] .ctx-card {
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 0.6rem;
+  margin-bottom: 0.7rem;
+  background: var(--panel-2);
+}
+:root[data-theme='cyberpunk'] .ctx-card__title {
+  color: var(--text);
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+:root[data-theme='cyberpunk'] .ctx-card__sub {
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+}
+:root[data-theme='cyberpunk'] .ctx-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+  flex-wrap: wrap;
+}
+:root[data-theme='cyberpunk'] .ctx-desc {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin-top: 0.4rem;
+}
+:root[data-theme='cyberpunk'] .ctx-empty {
+  color: var(--text-faint);
+  font-size: 0.8rem;
+  padding: 0.5rem 0;
+}
+:root[data-theme='cyberpunk'] .orch-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-bottom: 0.6rem;
+  margin-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+:root[data-theme='cyberpunk'] .orch-bar__pin {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  font-family: 'Share Tech Mono', monospace;
+}
+:root[data-theme='cyberpunk'] .orch-bar__spacer {
+  flex: 1;
+}
+:root[data-theme='cyberpunk'] .orch-bar__agent {
+  display: flex;
+  gap: 2px;
+  padding: 1px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+:root[data-theme='cyberpunk'] .orch-bar__agent .agent-seg {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 1px 6px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  line-height: 1.6;
+}
+:root[data-theme='cyberpunk'] .orch-bar__agent .agent-seg:hover:not(:disabled) {
+  color: var(--text);
+}
+:root[data-theme='cyberpunk'] .orch-bar__agent .agent-seg.active {
+  background: var(--accent);
+  color: var(--bg);
+}
+:root[data-theme='cyberpunk'] .orch-bar__agent .agent-seg:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+:root[data-theme='cyberpunk'] .ctx-subhead {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  margin: 0.8rem 0 0.4rem;
+}
+
+/* Repos-behind-origin banner. Sits directly under the header because a stale
+   checkout gives the agents an outdated view, so it should read as a blocking
+   condition rather than an ambient status pill. */
+:root[data-theme='cyberpunk'] .desync {
+  display: flex;
+  /* The app column stretches its children; these banners are status strips and
+     should hug their content rather than absorb the leftover height. */
+  flex: none;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 0.75rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--warn, #d08b2c);
+  border-left-width: 3px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--warn, #d08b2c) 12%, transparent);
+}
+:root[data-theme='cyberpunk'] .desync__icon {
+  font-size: 1.1rem;
+  color: var(--warn, #d08b2c);
+}
+:root[data-theme='cyberpunk'] .desync__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+  min-width: 0;
+}
+:root[data-theme='cyberpunk'] .desync__detail {
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+/* Per-repo sync badge in the project cards. */
+:root[data-theme='cyberpunk'] .repo__sync {
+  margin-left: 0.5rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--warn, #d08b2c);
+  color: var(--warn, #d08b2c);
+}
+:root[data-theme='cyberpunk'] .repo__sync.dirty-only {
+  border-color: var(--muted, #6b7280);
+  color: var(--muted, #6b7280);
+}
+
+/* Setup / readiness page. Each check states what's there, what isn't, and the
+   one command that fixes it — the daemon never runs those itself, because each
+   is a login flow owned by that CLI. */
+:root[data-theme='cyberpunk'] .settings-view {
+  padding: 0 0 2rem;
+  max-width: 62rem;
+}
+:root[data-theme='cyberpunk'] .settings-view__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+:root[data-theme='cyberpunk'] .settings-view__state {
+  padding: 0.1rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  border: 1px solid currentColor;
+}
+:root[data-theme='cyberpunk'] .settings-view__state.ok {
+  color: var(--ok, #3fb950);
+}
+:root[data-theme='cyberpunk'] .settings-view__state.bad {
+  color: var(--warn, #d08b2c);
+}
+:root[data-theme='cyberpunk'] .settings-view__error {
+  color: var(--bad, #f85149);
+  font-size: 0.85rem;
+}
+:root[data-theme='cyberpunk'] .settings-view__firstrun {
+  margin-bottom: 1.25rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--warn, #d08b2c);
+  border-left-width: 3px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--warn, #d08b2c) 12%, transparent);
+  line-height: 1.5;
+}
+
+:root[data-theme='cyberpunk'] .settings-group {
+  margin-bottom: 1.5rem;
+}
+:root[data-theme='cyberpunk'] .settings-group__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+:root[data-theme='cyberpunk'] .settings-group__head h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+:root[data-theme='cyberpunk'] .settings-group__blurb {
+  font-size: 0.78rem;
+  opacity: 0.65;
+}
+
+:root[data-theme='cyberpunk'] .check {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 0.4rem;
+  border: 1px solid var(--border, #30363d);
+  border-radius: 4px;
+}
+:root[data-theme='cyberpunk'] .check__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 0.35rem;
+  flex: none;
+  background: var(--muted, #6b7280);
+}
+:root[data-theme='cyberpunk'] .check__dot.ready {
+  background: var(--ok, #3fb950);
+}
+:root[data-theme='cyberpunk'] .check__dot.missing {
+  background: var(--warn, #d08b2c);
+}
+:root[data-theme='cyberpunk'] .check__body {
+  flex: 1;
+  min-width: 0;
+}
+:root[data-theme='cyberpunk'] .check__title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+:root[data-theme='cyberpunk'] .check__tag {
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+:root[data-theme='cyberpunk'] .check__detail {
+  font-size: 0.83rem;
+  opacity: 0.85;
+  margin-top: 0.15rem;
+}
+:root[data-theme='cyberpunk'] .check__fix {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.45rem;
+}
+:root[data-theme='cyberpunk'] .check__fix code {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 0.25rem 0.45rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+:root[data-theme='cyberpunk'] .check__evidence {
+  margin-top: 0.3rem;
+  font-size: 0.72rem;
+  opacity: 0.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:root[data-theme='cyberpunk'] .settings-facts > div {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.3rem 0;
+  font-size: 0.83rem;
+}
+:root[data-theme='cyberpunk'] .settings-facts span {
+  width: 10rem;
+  flex: none;
+  opacity: 0.65;
+}
+:root[data-theme='cyberpunk'] .settings-facts code {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+:root[data-theme='cyberpunk'] .settings-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  cursor: pointer;
+}
+:root[data-theme='cyberpunk'] .settings-toggle input {
+  margin-top: 0.25rem;
+}
+:root[data-theme='cyberpunk'] .desync--setup {
+  border-color: var(--accent, #4493f8);
+  background: color-mix(in srgb, var(--accent, #4493f8) 10%, transparent);
+}
+:root[data-theme='cyberpunk'] .desync--setup .desync__icon {
+  color: var(--accent, #4493f8);
+}
+
+/* "In play" panel above the orchestrator terminals: which skills the agent can
+   load, and which standards Flow injects. Collapsed by default — it
+   answers "why did it do that?" on demand without crowding the terminals. */
+:root[data-theme='cyberpunk'] .skills-bar {
+  flex: none;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.015);
+}
+:root[data-theme='cyberpunk'] .skills-bar__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+:root[data-theme='cyberpunk'] .skills-bar__chevron {
+  opacity: 0.7;
+}
+:root[data-theme='cyberpunk'] .skills-bar__count {
+  margin-left: auto;
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+:root[data-theme='cyberpunk'] .skills-bar__body {
+  padding: 0 0.6rem 0.55rem;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+:root[data-theme='cyberpunk'] .skills-bar__note {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  opacity: 0.6;
+}
+:root[data-theme='cyberpunk'] .skill {
+  border-top: 1px solid var(--border);
+}
+:root[data-theme='cyberpunk'] .skill.dim {
+  opacity: 0.45;
+}
+:root[data-theme='cyberpunk'] .skill__head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.3rem 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+:root[data-theme='cyberpunk'] .skill__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--muted, #6b7280);
+}
+:root[data-theme='cyberpunk'] .skill__dot.on {
+  background: var(--ok, #3fb950);
+}
+:root[data-theme='cyberpunk'] .skill__scope {
+  font-size: 0.72rem;
+  opacity: 0.6;
+}
+:root[data-theme='cyberpunk'] .skill__refs {
+  margin-left: auto;
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+:root[data-theme='cyberpunk'] .skill__detail {
+  padding: 0 0 0.5rem 1rem;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+:root[data-theme='cyberpunk'] .skill__detail ul {
+  margin: 0.3rem 0 0;
+  padding-left: 1.1rem;
+}
+:root[data-theme='cyberpunk'] .skill__body {
+  margin: 0 0 0.5rem;
+  padding: 0.5rem 0.6rem;
+  max-height: 16rem;
+  overflow: auto;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+}
+
+/* Full file text inside an expanded IN PLAY row. Each file gets its own
+   scroll box so a 9KB reference can't push the rest off screen. */
+:root[data-theme='cyberpunk'] .skill__desc {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+:root[data-theme='cyberpunk'] .skill__loading {
+  margin: 0.2rem 0;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+:root[data-theme='cyberpunk'] .skill__file {
+  margin-bottom: 0.4rem;
+}
+:root[data-theme='cyberpunk'] .skill__file-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.2rem 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+:root[data-theme='cyberpunk'] .skill__file-name {
+  font-size: 0.74rem;
+  letter-spacing: 0.03em;
+  opacity: 0.75;
+}
+
+/* How a skill reaches the agent: served by this harness over MCP (works for
+   any engine, but the agent has to ask), or auto-discovered by claude. */
+:root[data-theme='cyberpunk'] .skill__delivery {
+  padding: 0.02rem 0.32rem;
+  border-radius: 2px;
+  border: 1px solid currentColor;
+  font-size: 0.64rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+:root[data-theme='cyberpunk'] .skill__delivery.harness {
+  color: var(--accent, #4493f8);
+}
+:root[data-theme='cyberpunk'] .skill__delivery.auto {
+  color: var(--ok, #3fb950);
+}
+
+/* New components use the corporate token names; map them onto the neon palette
+   so they sit in this theme instead of looking pasted in. */
+:root[data-theme='cyberpunk'] {
+  color-scheme: dark;
+  --overlay: #0d0e24;
+  --input-bg: #1a1c38;
+  --input-bg-hover: #20234a;
+  --blanket: rgba(3, 3, 15, 0.8);
+  --border-strong: #3a3f78;
+  --border-focus: #05d9e8;
+  --text-inverse: #07071a;
+  --accent-text: #05d9e8;
+  --accent-subtle: rgba(5, 217, 232, 0.12);
+  --accent-pressed: #6ef0ff;
+  --success-text: #2dffb1;
+  --success-bg: rgba(45, 255, 177, 0.1);
+  --success-border: #2dffb1;
+  --warning-text: #fcee0a;
+  --warning-bg: rgba(252, 238, 10, 0.08);
+  --warning-border: #fcee0a;
+  --warning-bold: #fcee0a;
+  --danger-text: #ff5d92;
+  --danger-bg: rgba(255, 42, 109, 0.12);
+  --danger-border: #ff2a6d;
+  --info: #05d9e8;
+  --info-text: #05d9e8;
+  --info-bg: rgba(5, 217, 232, 0.1);
+  --info-border: #05d9e8;
+  --discovery: #b300ff;
+  --discovery-text: #d27bff;
+  --discovery-bg: rgba(179, 0, 255, 0.14);
+  --neutral-bg: #1a1c38;
+  --fill: rgba(5, 217, 232, 0.06);
+  --fill-hover: rgba(5, 217, 232, 0.14);
+  --fill-pressed: rgba(5, 217, 232, 0.22);
+  --panel-hover: #1a1c38;
+  --code-bg: #1a1c38;
+  --term-bg: #03030f;
+  --diff-add-bg: rgba(45, 255, 177, 0.08);
+  --diff-add-text: #2dffb1;
+  --diff-del-bg: rgba(255, 42, 109, 0.1);
+  --diff-del-text: #ff5d92;
+  --diff-hunk-bg: rgba(5, 217, 232, 0.08);
+  --diff-hunk-text: #05d9e8;
+  --shadow-overlay: 0 0 24px rgba(5, 217, 232, 0.25);
+  --font-sans: 'Rajdhani', 'Inter', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+  --radius-xs: 2px;
+  --radius-sm: 2px;
+  --radius: 2px;
+  --radius-lg: 3px;
+  --radius-xl: 4px;
+}
+
+/* The display font is wide: below a large desktop, tighten the tabs and drop
+   the workspace pill so the status pills never crowd the tab strip. */
+@media (max-width: 1366px) {
+  :root[data-theme='cyberpunk'] .tab {
+    letter-spacing: 0.12em;
+    padding: 6px 10px 8px;
+  }
+  :root[data-theme='cyberpunk'] .app__workspace {
+    display: none;
+  }
+}

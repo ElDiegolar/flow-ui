@@ -1,0 +1,22 @@
+node_modules
+dist
+.env
+.env.local
+*.log
+.DS_Store
+.cache
+.tsbuildinfo
+
+# Playwright
+test-results
+playwright-report
+.playwright
+
+# Visual-confirm artifacts (local UI state)
+web/tests/visual/shots
+web/tests/visual/verdicts.json
+web/tests/visual/screens.json
+web/tests/e2e/.tmp-home/
+
+# e2e fixture workspace repos (created by seed.sh)
+web/tests/e2e/fixtures/workspace/projects/

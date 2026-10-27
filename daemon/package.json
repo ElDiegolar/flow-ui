@@ -1,0 +1,29 @@
+{
+  "name": "@flow-ui/daemon",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/main.ts",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@fastify/static": "^7.0.4",
+    "@fastify/websocket": "^10.0.1",
+    "@homebridge/node-pty-prebuilt-multiarch": "^0.12.0",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@xterm/headless": "^5.5.0",
+    "dockerode": "^4.0.2",
+    "dotenv": "^16.4.5",
+    "fastify": "^4.28.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/dockerode": "^3.3.31",
+    "@types/node": "^22.5.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4"
+  }
+}

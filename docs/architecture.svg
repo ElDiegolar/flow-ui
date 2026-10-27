@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" width="960" height="620" role="img" aria-labelledby="t d">
+  <title id="t">Flow architecture: five layers</title>
+  <desc id="d">Developer browser tabs, the Flow web app, the Flow daemon, the orchestrator and its sub-agents, and the workspace of repos. Jira and Figma connect to the daemon's integrations hub as optional dashed links.</desc>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#57606a"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1f2328; }
+    .band { fill: #f6f8fa; stroke: #d0d7de; stroke-width: 1; }
+    .box { fill: #ffffff; stroke: #d0d7de; stroke-width: 1; }
+    .pill { fill: #ffffff; stroke: #8c959f; stroke-width: 1; }
+    .ext { fill: #ffffff; stroke: #8c959f; stroke-width: 1; }
+    .line { fill: none; stroke: #57606a; stroke-width: 1.5; }
+    .dash { fill: none; stroke: #57606a; stroke-width: 1.5; stroke-dasharray: 5 4; }
+    .lbl { font-size: 14px; font-weight: 700; }
+    .sub { font-size: 11px; fill: #57606a; }
+    .c { text-anchor: middle; }
+    .s { font-size: 12px; }
+    .xs { font-size: 10px; fill: #57606a; }
+  </style>
+
+  <!-- 1. Developer -->
+  <rect class="band" x="16" y="16" width="736" height="76" rx="6"/>
+  <text class="lbl" x="32" y="44">Developer</text>
+  <text class="sub" x="32" y="62">browser tabs</text>
+  <rect class="pill" x="210" y="37" width="80" height="34" rx="17"/><text class="s c" x="250" y="58">Tasks</text>
+  <rect class="pill" x="298" y="37" width="80" height="34" rx="17"/><text class="s c" x="338" y="58">Orchestrator</text>
+  <rect class="pill" x="386" y="37" width="80" height="34" rx="17"/><text class="s c" x="426" y="58">Agent</text>
+  <rect class="pill" x="474" y="37" width="80" height="34" rx="17"/><text class="s c" x="514" y="58">Commit</text>
+  <rect class="pill" x="562" y="37" width="80" height="34" rx="17"/><text class="s c" x="602" y="58">Diff</text>
+  <rect class="pill" x="650" y="37" width="80" height="34" rx="17"/><text class="s c" x="690" y="58">Setup</text>
+
+  <!-- 2. Flow web -->
+  <rect class="band" x="16" y="104" width="736" height="84" rx="6"/>
+  <text class="lbl" x="32" y="132">Flow web</text>
+  <text class="sub" x="32" y="150">Vue, Vite</text>
+  <text class="xs" x="32" y="168">HTTP / WS</text>
+  <rect class="box" x="210" y="121" width="160" height="50" rx="6"/><text class="s c" x="290" y="151">one events socket</text>
+  <rect class="box" x="390" y="121" width="160" height="50" rx="6"/><text class="s c" x="470" y="151">store</text>
+  <rect class="box" x="570" y="121" width="160" height="50" rx="6"/><text class="s c" x="650" y="151">terminal panes (xterm)</text>
+
+  <!-- 3. Flow daemon -->
+  <rect class="band" x="16" y="200" width="736" height="124" rx="6"/>
+  <text class="lbl" x="32" y="228">Flow daemon</text>
+  <text class="sub" x="32" y="246">Node, Fastify</text>
+  <text class="sub" x="32" y="262">loopback + token</text>
+  <rect class="box" x="210" y="212" width="170" height="44" rx="6"/><text class="s c" x="295" y="238">REST + WS routes</text>
+  <rect class="box" x="395" y="212" width="170" height="44" rx="6"/><text class="s c" x="480" y="238">PTY sessions</text>
+  <rect class="box" x="580" y="212" width="170" height="44" rx="6"/><text class="s c" x="665" y="238">integrations hub</text>
+  <rect class="box" x="210" y="266" width="170" height="44" rx="6"/><text class="s c" x="295" y="286">settings, tasks, learnings</text><text class="xs c" x="295" y="301">on disk (~/.flow-ui)</text>
+  <rect class="box" x="395" y="266" width="170" height="44" rx="6"/><text class="s c" x="480" y="292">flow MCP server</text>
+  <rect class="box" x="580" y="266" width="170" height="44" rx="6"/><text class="s c" x="665" y="292">code graphs (graphify)</text>
+
+  <!-- 4. Agents -->
+  <rect class="band" x="16" y="336" width="736" height="96" rx="6"/>
+  <text class="lbl" x="32" y="372">Agents</text>
+  <text class="sub" x="32" y="390">orchestrator and</text>
+  <text class="sub" x="32" y="404">sub-agents</text>
+  <rect class="box" x="210" y="356" width="170" height="56" rx="6"/>
+  <text class="s c" style="font-weight:700" x="295" y="377">Orchestrator</text>
+  <text class="xs c" x="295" y="394">Claude Code or Codex</text>
+  <text class="xs c" x="295" y="407">holds the flow MCP</text>
+  <rect class="box" x="420" y="356" width="100" height="56" rx="6"/>
+  <text class="s c" x="470" y="377">Sub-agent</text><text class="xs c" x="470" y="394">repo A</text>
+  <rect class="box" x="530" y="356" width="100" height="56" rx="6"/>
+  <text class="s c" x="580" y="377">Sub-agent</text><text class="xs c" x="580" y="394">repo B</text>
+  <rect class="box" x="640" y="356" width="100" height="56" rx="6"/>
+  <text class="s c" x="690" y="377">Sub-agent</text><text class="xs c" x="690" y="394">repo C</text>
+
+  <!-- 5. Workspace -->
+  <rect class="band" x="16" y="448" width="736" height="84" rx="6"/>
+  <text class="lbl" x="32" y="478">Workspace</text>
+  <text class="sub" x="32" y="496">a folder of repos</text>
+  <rect class="box" x="210" y="468" width="98" height="50" rx="6"/><text class="xs c" x="259" y="491">projects/</text><text class="xs c" x="259" y="506">&lt;category&gt;/&lt;repo&gt;</text>
+  <rect class="box" x="318" y="468" width="98" height="50" rx="6"/><text class="xs c" x="367" y="498">.agents/skills</text>
+  <rect class="box" x="426" y="468" width="98" height="50" rx="6"/><text class="xs c" x="475" y="498">standards/</text>
+  <rect class="box" x="534" y="468" width="98" height="50" rx="6"/><text class="xs c" x="583" y="498">AGENTS.md</text>
+  <rect class="box" x="642" y="468" width="98" height="50" rx="6"/><text class="xs c" x="691" y="498">flow.config.json</text>
+
+  <!-- Right margin: external integrations -->
+  <text class="sub" x="790" y="166" style="font-weight:700">External</text>
+  <rect class="ext" x="790" y="176" width="140" height="44" rx="6"/>
+  <text class="s c" x="860" y="195" style="font-weight:700">Jira</text><text class="xs c" x="860" y="210">Atlassian MCP</text>
+  <rect class="ext" x="790" y="252" width="140" height="44" rx="6"/>
+  <text class="s c" x="860" y="271" style="font-weight:700">Figma Desktop</text><text class="xs c" x="860" y="286">design context</text>
+
+  <!-- Connectors -->
+  <!-- browser <-> daemon (HTTP/WS) -->
+  <path class="line" d="M196 92 V200" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <!-- daemon -> orchestrator: spawns, PTY -->
+  <path class="line" d="M280 310 V356" marker-end="url(#arr)"/>
+  <text class="xs" x="290" y="347">spawns, PTY</text>
+  <!-- orchestrator -> daemon MCP -->
+  <path class="line" d="M360 356 L420 310" marker-end="url(#arr)"/>
+  <!-- orchestrator -> sub-agents -->
+  <path class="line" d="M380 384 L420 366" marker-end="url(#arr)"/>
+  <path class="line" d="M380 384 L420 384" marker-end="url(#arr)"/>
+  <path class="line" d="M380 384 L420 402" marker-end="url(#arr)"/>
+  <!-- sub-agents -> workspace repos (read/write) -->
+  <path class="line" d="M690 412 V440 H258 V468" marker-end="url(#arr)"/>
+  <path class="line" d="M580 412 V440"/>
+  <path class="line" d="M470 412 V440"/>
+  <text class="xs" x="300" y="455">read / write in their repo</text>
+  <!-- daemon -> workspace (git, graph builds) -->
+  <path class="line" d="M756 290 H766 V493 H742" marker-end="url(#arr)"/>
+  <text class="xs" x="772" y="392">git and</text>
+  <text class="xs" x="772" y="406">graph builds</text>
+  <!-- optional integrations (dashed) -->
+  <path class="dash" d="M790 198 L750 226" marker-end="url(#arr)"/>
+  <path class="dash" d="M790 274 L750 246" marker-end="url(#arr)"/>
+
+  <!-- Legend -->
+  <rect class="band" x="196" y="548" width="560" height="68" rx="6"/>
+  <path class="line" d="M210 566 H240" marker-end="url(#arr)"/>
+  <text class="s" x="248" y="570">control</text>
+  <path class="dash" d="M320 566 H350" marker-end="url(#arr)"/>
+  <text class="s" x="358" y="570">optional integration</text>
+  <text class="xs" x="210" y="594">Orchestrator to daemon MCP: run_agent, task_*, code_graph_ask and more.</text>
+  <text class="xs" x="210" y="608">Sub-agents run in their repo with bypassed permissions and no MCP servers.</text>
+</svg>

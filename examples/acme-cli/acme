@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# acme: a stand-in for a company's internal CLI. It does not deploy or open
+# anything; it only echoes what the real tool would do, so the wiring can be
+# tried end to end without touching real infrastructure.
+#
+# How it is wired in: copy this file to <workspace>/tools/acme (and chmod +x).
+# flow.config.json then names it in `commands`, e.g.
+#   { "id": "deploy-staging", "label": "Deploy staging",
+#     "run": "./tools/acme deploy staging", "scope": "workspace", "confirm": true }
+# `run` is executed with `sh -c` in the cwd of the scope: the workspace root for
+# scope "workspace", the repo for scope "repo". Flow sets FLOW_WORKSPACE,
+# FLOW_CATEGORY, FLOW_REPO and FLOW_REPO_PATH for the child, so a repo-scope
+# entry can call `./tools/acme status` and let the script read the repo it was
+# given instead of taking arguments for it.
+#
+# Usage:
+#   acme deploy <staging|production>   echo the deploy plan for an environment
+#   acme status                        echo the status check for the current repo
+#   acme open <repo>                   echo where the repo would open in the editor
+set -euo pipefail
+
+usage() {
+  echo "usage: acme deploy <staging|production> | acme status | acme open <repo>" >&2
+  exit 2
+}
+
+cmd="${1:-}"
+shift || true
+
+case "$cmd" in
+  deploy)
+    env="${1:-}"
+    case "$env" in
+      staging | production) ;;
+      *) echo "acme: deploy needs staging or production" >&2; exit 2 ;;
+    esac
+    echo "[dry-run] acme would deploy workspace '${FLOW_WORKSPACE:-unset}' to $env"
+    echo "[dry-run] step 1: build the release bundle"
+    echo "[dry-run] step 2: push it to the $env registry"
+    echo "[dry-run] step 3: roll the $env services and wait for health checks"
+    ;;
+  status)
+    where="${FLOW_REPO_PATH:-${FLOW_WORKSPACE:-$PWD}}"
+    echo "[dry-run] acme would check deploy status for: $where"
+    echo "[dry-run] would report: last deploy, running version, health"
+    ;;
+  open)
+    repo="${1:-}"
+    [ -n "$repo" ] || { echo "acme: open needs a repo name" >&2; exit 2; }
+    echo "[dry-run] acme would open ${FLOW_WORKSPACE:-.}/projects/*/$repo in the editor"
+    ;;
+  *)
+    usage
+    ;;
+esac
