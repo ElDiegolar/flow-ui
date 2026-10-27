@@ -478,7 +478,7 @@ server.registerTool(
     description:
       'Check out a branch (default: pinned repo) and fast-forward it from origin. Refuses on uncommitted changes; create:true starts a new local branch.',
     inputSchema: {
-      branch: z.string().describe('Branch name, e.g. "feature/STL-123-login".'),
+      branch: z.string().describe('Branch name, e.g. "feature/ABC-123-login".'),
       create: z
         .boolean()
         .optional()
